@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    ports:
+      - $MYSQL_PORT_EXPOSED:$MYSQL_PORT
+    expose:
+      - $MYSQL_PORT_EXPOSED
+    volumes:
+      - mysqldbvolume:/var/lib/mysql
+      - ./my.cnf:/etc/my.cnf
+  api:
+    depends_on:
+      - db
+    image: andersgee/rustapi
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: $DATABASE_URL_CONTAINER
+      API_PORT: $API_PORT
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - $API_PORT:$API_PORT
+    expose:
+      - $API_PORT
+
+volumes:
+  mysqldbvolume:

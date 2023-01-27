@@ -1,0 +1,23 @@
+[workspace]
+members = [
+    "prisma-cli",
+]
+
+[package]
+name = "rustapi"
+version = "0.1.0"
+edition = "2021"
+#default-run = "prisma"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies.prisma-client-rust]
+git = "https://github.com/Brendonovich/prisma-client-rust"
+tag = "0.6.4"
+default-features = false
+features = ["mysql"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+actix-web = "4"
+dotenv = "0.15.0"
